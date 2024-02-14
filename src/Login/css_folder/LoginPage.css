@@ -5,13 +5,15 @@
     --admin-box-background: linear-gradient(45deg,#637da5,rgb(152, 172, 186));
 
     --border-background: linear-gradient(135deg,rgb(45, 105, 195),rgba(0, 255, 225, 0.378));
+    /* --border-background: linear-gradient(135deg,rgba(215, 71, 31, 0.742),rgba(255, 0, 43, 0.737)); */
+
     --button-color: linear-gradient(135deg,rgb(206, 130, 30),rgba(216, 150, 58, 0.874));
-
-
+    
+    
 }
 .background{
-    background: url('loginbg.png') center/cover no-repeat; 
-opacity: 0.9;
+    background: url('artistic.png') center/cover no-repeat; 
+opacity: 0.8;
 position: absolute;
 width: 100vw;
     height: 100vh;
@@ -21,11 +23,11 @@ width: 100vw;
 .background::before{
     content: '';
     background: var(--border-background);
-    opacity: 0.5;
+    opacity: 1;
     position: absolute;
     top: 0px;
     left: 50%;
-    width: 50vw;
+    width: 100vw;
     height: 100vh;
     z-index: -1;
 }

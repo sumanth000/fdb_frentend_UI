@@ -1,6 +1,9 @@
 import './css_folder/LoginPage.css'
 import {useEffect, useState} from 'react';
 import { Navigate } from 'react-router-dom';
+import empCredData from '../data_folders/employeeCredentials.json'
+import  adminCredData from '../data_folders/adminCredentials.json'
+
 export default function LoginPage(){
 
     let credentialsObject={
@@ -12,6 +15,10 @@ export default function LoginPage(){
 
     
     let [logInSuccess,setLogInSuccess]=useState(false);
+
+    let [logInSuccessAsAdmin,setLogInSuccessAsAdmin]=useState(false);
+    let [logInSuccessAsEmployee,setLogInSuccessAsEmployee]=useState(false);
+
 
     let [selectAsEmployee,setSelectAsEmployee]=useState(true);
     let [selectAsAdmin,setSelectAsAdmin]=useState(false);
@@ -58,10 +65,14 @@ let [employeePersonClass,setemployeePersonClass]=useState('personActive');
 
         if (id === "password") {
             setPassword(value);
+
+            setCredentials({...credentials,password: value})
         }
 
         if (id === "userId") {
             setUserId(value);
+            setCredentials({...credentials,userId: value})
+
         }
 
 
@@ -97,14 +108,40 @@ let [employeePersonClass,setemployeePersonClass]=useState('personActive');
 
     }
 
-    let logInAs = () => {
-        setCredentials({...credentials,password:password,userId:userId})
-        let status="success";
-        if(status=="success")
+    let checkCredentialsOfEmployee=()=>{
+
+        console.log("userid   ",userId," password ",password)
+      
+        if(empCredData.find((e)=>{ return  e.password==password && e.userId==userId }))
         {
-            console.log('retrunred')
-            setLogInSuccess(true);
-            // return <Navigate to="/admin" />;
+            setLogInSuccessAsEmployee(true);
+        }
+        
+
+    }
+
+    let checkCredentialsOfAdmin=()=>{
+
+        console.log("userid   ",userId," password ",password)
+       
+
+         if(adminCredData.find((e)=>{ return  e.password==password && e.userId==userId }))
+         {
+             setLogInSuccessAsAdmin(true);
+         }
+         
+
+    }
+
+    let logInAs = () => {
+      
+        if(credentials.who=="employee")
+        {
+            checkCredentialsOfEmployee();
+        }
+        if(credentials.who=="admin")
+        {
+            checkCredentialsOfAdmin();
         }
     }
 
@@ -126,12 +163,15 @@ let [employeePersonClass,setemployeePersonClass]=useState('personActive');
     }, [])
 
     
-   if(logInSuccess)
+   if(logInSuccessAsAdmin)
    {
         return <Navigate to="/admin" />;
-
    }
 
+   if(logInSuccessAsEmployee)
+   {
+    return <Navigate to="/employee" />;
+   }
     return (
         
         <div className="body">
