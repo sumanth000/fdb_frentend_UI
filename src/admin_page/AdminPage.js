@@ -1,22 +1,37 @@
 
 import { DataGrid } from '@mui/x-data-grid';
-import empDatajson from './../data_folders/empData.json'
+import adminDatajson from './../data_folders/adminData.json'
 import { useEffect, useState } from 'react';
 import admstyles from './css-folder/AdminPage.module.css'
 export default function AdminPage(){
 
-    let [empData,setEmpData]=useState([])
+    let [empData,setEmpData]=useState([]);
+    // let [earnings]
     let columnHeaders = [
         { field: 'name', headerName: 'Username', flex: 1, align: 'center', headerAlign: 'center' }, 
-        { field: 'id', headerName: 'UserId', flex: 1, align: 'center', headerAlign: 'center' }, 
-        { field: 'hours', headerName: 'Hours worked', flex: 1, align: 'center', headerAlign: 'center' },]
+        { field: 'date', headerName: 'Username', flex: 1, align: 'center', headerAlign: 'center' }, 
 
+        { field: 'activity_id', headerName: 'UserId', flex: 1, align: 'center', headerAlign: 'center' }, 
+        { field: 'hours', headerName: 'Hours worked', flex: 1, align: 'center', headerAlign: 'center' },
+
+        { field: 'earnings', headerName: 'earnings', flex: 1, align: 'center', headerAlign: 'center' },
+        { field: 'ofPerson',headerName: 'person' ,flex:1,align:'center',headerAlign:'center',renderCell:(params)=>{ }},
+
+    ]
 
     useEffect(()=>{
 
-   setEmpData(empDatajson);
+        let adminData=adminDatajson.map((e)=>{
+            return {
+                ...e,
+                earnings: '$'+e.hours*10
+            }
+        })
 
-    },[empDatajson])
+
+   setEmpData(adminData);
+
+    },[adminDatajson])
 
     return(
         <div className={admstyles.body}>
@@ -27,7 +42,7 @@ export default function AdminPage(){
                     autoHeight
                     columns={columnHeaders}
                     rows={empData}
-                  
+                                          
                 >
 
                 </DataGrid>
