@@ -4,7 +4,11 @@ import { useState,useEffect,useRef } from 'react'
 
 export default function Divbutton(props){
 
-    const { data } = props;
+    const { id,data ,isPresentcallback,disabled} = props;
+
+
+    const [disabling,setDisabling]=useState(true);
+    
 
     const buttonref = useRef(null);
     const swipingRef=useRef(null);
@@ -12,7 +16,12 @@ export default function Divbutton(props){
     const [isPresent,setIsPresent]=useState(false);
 
     useEffect(() => {
-        console.log("divbutton data --> ", data);
+        console.log(" props of button compnoent --> ", data);
+        console.log(" props --> ", props);
+
+    
+
+
     }, [data]);
 
    let  containerclicked=()=>{
@@ -20,19 +29,10 @@ export default function Divbutton(props){
 
     if(isPresent)
     {
-        let containerElement=buttonref.current;
-        containerElement.style.background='green';
-        console.log('hi')
-        let swipeElement=swipingRef.current;
-        // swipeElement.style.right='0px'
-        // swipeElement.style.left='unset'
-        setIsPresent(false);
+        
+        isPresentcallback(id,'absent callback data');
 
-        swipeElement.classList.add(buttontyles.moved);
-
-    }
-    else{
-        console.log('')
+        console.log('turning red')
 
         let containerElement=buttonref.current;
         containerElement.style.background='red';
@@ -41,14 +41,32 @@ export default function Divbutton(props){
         // swipeElement.style.left='0px'
         swipeElement.classList.remove(buttontyles.moved);
 
+        setIsPresent(false);
+
+    }
+    else{
+
+        isPresentcallback(id,'present callback data');
+
+        let containerElement=buttonref.current;
+        containerElement.style.background='green';
+        console.log('turning green')
+        let swipeElement=swipingRef.current;
+        // swipeElement.style.right='0px'
+        // swipeElement.style.left='unset'
         setIsPresent(true);
+
+        swipeElement.classList.add(buttontyles.moved);
+        
     }
 
     
 
     }
     return (
-        <div className={buttontyles.body}>
+<div className={disabled ? 'buttontyles.disabled' : ''}>
+    
+<div className={`${buttontyles.body} ${disabled ? buttontyles.disabled : ''}`}>
             <div ref={buttonref} onClick={containerclicked}className={buttontyles.container}>
                 <span>P</span>
                 <span>A</span>
@@ -56,5 +74,7 @@ export default function Divbutton(props){
             </div>
             
         </div>
+        </div>
+       
     )
 }

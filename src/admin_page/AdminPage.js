@@ -2,6 +2,7 @@
 import { DataGrid } from '@mui/x-data-grid';
 import empDatajson from './../data_folders/empData.json'
 import { useEffect, useState } from 'react';
+import admstyles from './css-folder/AdminPage.module.css'
 export default function AdminPage(){
 
     let [empData,setEmpData]=useState([])
@@ -18,17 +19,20 @@ export default function AdminPage(){
     },[empDatajson])
 
     return(
-        <div>
-            adminpage
+        <div className={admstyles.body}>
+           <div className={admstyles.title}>ADMIN PAGE</div>
+            <div className={admstyles.tableContainer}>
+                <DataGrid
 
-            <DataGrid
+                    autoHeight
+                    columns={columnHeaders}
+                    rows={empData}
+                  
+                >
 
-            autoHeight
-            columns={columnHeaders}
-            rows={empData}
-            >
+                </DataGrid>
+            </div>
 
-            </DataGrid>
         </div>
     )
 }
