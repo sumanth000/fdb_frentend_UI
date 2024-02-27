@@ -5,9 +5,41 @@ import empDatajson from './../data_folders/empData.json'
 import { useEffect, useState } from 'react';
 import Divbutton from './divButton';
 import empStyles from './css_folder/employeePage.module.css'
+import { useLocation } from 'react-router-dom';
+
+import AddIcon from '@mui/icons-material/Add';
+
 
 export default function EmployeePage(){
 
+    const location = useLocation();
+    const state= location.state;
+
+    console.log('state',state);
+
+
+    let [empData,setEmpData]=useState([])
+    let [empDataToShow,setEmpDataToShow]=useState([])
+
+
+    
+
+    let columnHeaders=[
+                { field: 'actId',headerName: 'ActivityID',flex:1,align:'center',headerAlign:'center' }, 
+
+        { field: 'name',headerName: 'Username',flex:1,align:'center',headerAlign:'center' }, 
+        // { field: 'id',headerName: 'UserId',flex:1,align:'center',headerAlign:'center' }, 
+        { field: 'clockIn',headerName:'clockIn' ,flex:1,align:'center',headerAlign:'center',renderCell:(params)=>{ return ( <div onClick={()=>{inFunction(params.row,'clockIn')}}><Divbutton id='clockIn' data={params.row.hours} isPresentcallback={isPresentcallback} disabled={params.row.disableClockIn}></Divbutton></div>)}},
+        { field: 'inTime',headerName: 'inTime',flex:1,align:'center',headerAlign:'center' }, 
+
+        { field: 'clockOut',headerName: 'clockOut' ,flex:1,align:'center',headerAlign:'center',renderCell:(params)=>{ return (<div  onClick={()=>{inFunction(params.row,'clockOut')}} ><Divbutton id='clockOut'  data={params.row.hours} isPresentcallback={isPresentcallback} disabled={params.row.disableClockOut} ></Divbutton></div>)}},
+        { field: 'outTime',headerName: 'outTime',flex:1,align:'center',headerAlign:'center' }, 
+
+        { field: 'hours',headerName: 'Hours worked' ,flex:1,align:'center',headerAlign:'center'}
+
+    ]
+
+    //functions
     let isPresentcallback=(id,getdata)=>{
         console.log("isPresentcallback  function in the parent--> ",id,' & ' ,getdata)
 
@@ -19,7 +51,7 @@ export default function EmployeePage(){
         {
 
         let setinTime=empData.map((e)=>{
-            if(e.id== params.id && e.disableClockOut==true && e.disableClockIn==false)
+            if(e.actId== params.actId && e.disableClockOut==true && e.disableClockIn==false)
             return {
                 ...e,
                 inTime: new Date(),
@@ -36,7 +68,7 @@ export default function EmployeePage(){
       if(clockData=="clockOut")
         {
         let setinTime=empData.map((e)=>{
-            if(e.id== params.id && e.disableClockOut==false && e.disableClockIn==true)
+            if(e.actId== params.actId && e.disableClockOut==false && e.disableClockIn==true)
             return {
                 ...e,
                 outTime: new Date(),
@@ -51,20 +83,63 @@ export default function EmployeePage(){
       }
 
     }
+    let addNewEmpRow=()=>{
+        let empNew=[...empData];
+        let newRow={
+        
+        name:'mamatha',
+         id:"44",
+         actId:empNew[empNew.length-1].actId+1,
+            disableClockIn:false,               
+            disableClockOut: true,
+            hours:''
+        }
 
-    let [empData,setEmpData]=useState([])
-    let columnHeaders=[
-        { field: 'name',headerName: 'Username',flex:1,align:'center',headerAlign:'center' }, 
-        // { field: 'id',headerName: 'UserId',flex:1,align:'center',headerAlign:'center' }, 
-        { field: 'clockIn',headerName:'clockIn' ,flex:1,align:'center',headerAlign:'center',renderCell:(params)=>{ return ( <div onClick={()=>{inFunction(params.row,'clockIn')}}><Divbutton id='clockIn' data={params.row.hours} isPresentcallback={isPresentcallback} disabled={params.row.disableClockIn}></Divbutton></div>)}},
-        { field: 'inTime',headerName: 'inTime',flex:1,align:'center',headerAlign:'center' }, 
+        // console.log(empNew);
+        empNew.push(newRow)
+        setEmpData(empNew)
+    }
 
-        { field: 'clockOut',headerName: 'clockOut' ,flex:1,align:'center',headerAlign:'center',renderCell:(params)=>{ return (<div  onClick={()=>{inFunction(params.row,'clockOut')}} ><Divbutton id='clockOut'  data={params.row.hours} isPresentcallback={isPresentcallback} disabled={params.row.disableClockOut} ></Divbutton></div>)}},
-        { field: 'outTime',headerName: 'outTime',flex:1,align:'center',headerAlign:'center' }, 
 
-        { field: 'hours',headerName: 'Hours worked' ,flex:1,align:'center',headerAlign:'center'}
+    //use effects
 
-    ]
+    useEffect(()=>{
+
+        let empData1=[...empData];
+      
+        let empNew=empData1.map((e)=>{
+
+            if(e.inTime && e.outTime)
+            {
+                console.log("coming to fix time 1")
+
+                if(e.inTime!==null && e.outTime!=null )
+                {
+                    console.log("seconds calc ->"+(e.outTime-e.inTime)/1000);
+                    let hoursCalc=(e.outTime-e.inTime)/1000;
+                    return {
+                        ...e,
+                        hours: hoursCalc
+                    }
+                }
+                
+            }
+            else
+            return {
+        ...e
+        }
+            
+        })
+
+        console.log('new data after time calculated',empNew);
+
+
+        setEmpDataToShow(empNew);
+
+
+
+    },[empData])
+    
 
 
     useEffect(()=>{
@@ -80,7 +155,7 @@ export default function EmployeePage(){
 
         console.log(JSON.stringify(empnew));
 
-   setEmpData(empnew);
+     setEmpData(empnew);
 
     },[empDatajson])
 
@@ -88,12 +163,21 @@ export default function EmployeePage(){
         <div className='body'>
           
           <div className={empStyles.title}>EMPLOYEE PAGE</div>
+          
             <div className={empStyles.tableContainer}>
+                <div className={empStyles.plusIcon} onClick={addNewEmpRow}>
+                    <span className={empStyles.spanText}>ADD ROW</span>
+
+                </div>
+
+                
                 <DataGrid
 
                     autoHeight
                     columns={columnHeaders}
-                    rows={empData}
+                    rows={empDataToShow}
+                    getRowId={(row) => row.actId}
+
                 >
 
                 </DataGrid>

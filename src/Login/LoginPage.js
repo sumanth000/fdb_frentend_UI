@@ -170,7 +170,7 @@ let [employeePersonClass,setemployeePersonClass]=useState('personActive');
 
    if(logInSuccessAsEmployee)
    {
-    return <Navigate to="/employee" />;
+    return <Navigate to="/employee"state={credentials} />;
    }
     return (
         

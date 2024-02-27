@@ -8,6 +8,7 @@ position: relative;
 }
 
 .tableContainer{
+  position: relative;
   display: flex;
   height: 80vh;
   width: 80vw;
@@ -30,3 +31,28 @@ position: relative;
 
 
 
+
+
+.plusIcon {
+  position: absolute;
+  right: -70px;
+  width: 70px;
+  height: 70px;
+  background: linear-gradient(45deg, #5dadff9e, #1469d9);
+  color: white;
+  padding: 0px;
+  border-radius: 0% 50% 50% 0%;
+  cursor: pointer;
+  transition: all 0.5ms ease-in 0.5ms;
+}
+.plusIcon:active {
+  transform: scale(0.89);
+}
+.spanText {
+  position: absolute;
+  left: 0px;
+  top: 25%;
+  display: inline-block;
+  width: fit-content;
+  height: fit-content;
+}
