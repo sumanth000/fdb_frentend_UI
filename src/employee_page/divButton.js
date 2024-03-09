@@ -4,7 +4,7 @@ import { useState,useEffect,useRef } from 'react'
 
 export default function Divbutton(props){
 
-    const { id,data ,isPresentcallback,disabled} = props;
+    const { id,buttonStatus ,isPresentcallback,disabled} = props;
 
 
     const [disabling,setDisabling]=useState(true);
@@ -16,13 +16,13 @@ export default function Divbutton(props){
     const [isPresent,setIsPresent]=useState(false);
 
     useEffect(() => {
-        console.log(" props of button compnoent --> ", data);
+        console.log(" ButtonStatus --> ", buttonStatus);
         console.log(" props --> ", props);
 
-    
+        // containerclicked();
 
 
-    }, [data]);
+    }, [buttonStatus]);
 
    let  containerclicked=()=>{
 
