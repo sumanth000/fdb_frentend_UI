@@ -149,7 +149,7 @@ let [employeePersonClass,setemployeePersonClass]=useState('personActive');
                 {
 
 
-                    setCredentials({...credentials,employeeId: employeeCredData.find((e,index)=>{ return e.userid==credentials.userId && e.password==credentials.password}).id});
+                    setCredentials({...credentials,employeeId: employeeCredData.find((e,index)=>{ return e.userid==credentials.userId && e.password==credentials.password}).id, payScale: employeeCredData.find((e,index)=>{ return e.userid==credentials.userId && e.password==credentials.password}).payscale});
 
                      console.log('Employee login success')
                     setLogInSuccessAsEmployee(true);

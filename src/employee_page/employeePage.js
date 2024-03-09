@@ -120,6 +120,7 @@ export default function EmployeePage() {
         else
         {
             let newRow = {
+                pay_scale:propData.payScale,
                 employee_id: propData.employeeId,
                 user_id: propData.userId,
                 actId: empData.length>0?(empNewData[empNewData.length - 1].actId + 1):1,
