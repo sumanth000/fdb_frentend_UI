@@ -8,7 +8,8 @@ export default function LoginPage(){
     let credentialsObject={
         who:'employee',
         password:'',
-        userId:''
+        userId:'',
+        employeeId:''
 
     }
 
@@ -144,8 +145,12 @@ let [employeePersonClass,setemployeePersonClass]=useState('personActive');
 
              
              if(employeeCredData.length>0)
-                if(employeeCredData.find((e,index)=>{ console.log(index);return e.userid==credentials.userId && e.password==credentials.password}))
+                if(employeeCredData.find((e,index)=>{ return e.userid==credentials.userId && e.password==credentials.password}))
                 {
+
+
+                    setCredentials({...credentials,employeeId: employeeCredData.find((e,index)=>{ return e.userid==credentials.userId && e.password==credentials.password}).id});
+
                      console.log('Employee login success')
                     setLogInSuccessAsEmployee(true);
                 }

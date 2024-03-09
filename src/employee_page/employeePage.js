@@ -6,7 +6,7 @@ import { useEffect, useState } from 'react';
 import Divbutton from './divButton';
 import empStyles from './css_folder/employeePage.module.css'
 import { useLocation } from 'react-router-dom';
-
+import './css_folder/employeePage.css';
 
 import AddIcon from '@mui/icons-material/Add';
 import { Save } from '@mui/icons-material';
@@ -50,7 +50,7 @@ export default function EmployeePage() {
     let inFunction = (params, clockData) => {
         console.log("id in infunction ", params, ' ', clockData);
 
-        if (clockData == "clockIn") {
+        if (clockData == "clockIn" && !params.disable_clock_in) {
 
             let setinTimeData = empData.map((e) => {
                 if (e.actId == params.actId && e.disable_clock_out == true && e.disable_clock_in == false)
@@ -81,7 +81,7 @@ export default function EmployeePage() {
 
 
         }
-        if (clockData == "clockOut") {
+        if (clockData == "clockOut" && !params.disable_clock_out) {
             let setOutTime = empData.map((e) => {
                 if (e.actId == params.actId && e.disable_clock_out == false && e.disable_clock_in == true) {
                     let formattedDateTime = new Date().toISOString().substring(0,10) + ' ' + new Date().toISOString().substring(11,19);
@@ -110,30 +110,34 @@ export default function EmployeePage() {
         let empNewData = [...empData];
         // to check if the last row has the status of clockout P
 
-        console.log("new data",empNewData);
+        // console.log("this exists before",empNewData);
 
-        console.log("#12", empNewData[empNewData.length - 1].disable_clock_out);
-        if (empNewData[empNewData.length - 1].disable_clock_out == false) {
+        // console.log("#12", empNewData[empNewData.length - 1].disable_clock_out);
+        if (empData.length>0 && !(empNewData[empNewData.length - 1].disable_clock_in == true &&  empNewData[empNewData.length - 1].disable_clock_out == true)) {
             alert("Clock out the last row before adding a new row")
             return;
         }
-        let newRow = {
-
-            user_id: propData.userId,
-            actId: empNewData[empNewData.length - 1].actId + 1,
-            disable_clock_in: false,
-            disable_clock_out: true,
-            clock_in_status: "A",
-            clock_out_status: "A"
+        else
+        {
+            let newRow = {
+                employee_id: propData.employeeId,
+                user_id: propData.userId,
+                actId: empData.length>0?(empNewData[empNewData.length - 1].actId + 1):1,
+                disable_clock_in: false,
+                disable_clock_out: true,
+                clock_in_status: "A",
+                clock_out_status: "A"
+            }
+    
+            save_new_row_in_db(newRow);
+    
+            fetchData(propData)
+    
+            // console.log(empNew);
+            empNewData.push(newRow)
+            setEmpData(empNewData)
         }
-
-        save_new_row_in_db(newRow);
-
-        fetchData(propData)
-
-        // console.log(empNew);
-        empNewData.push(newRow)
-        setEmpData(empNewData)
+       
     }
 
 

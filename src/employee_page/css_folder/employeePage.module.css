@@ -56,3 +56,7 @@ position: relative;
   width: fit-content;
   height: fit-content;
 }
+
+.MuiDataGrid-virtualScroller.css-qvtrhg-MuiDataGrid-virtualScroller {
+  overflow: auto !important;
+}
