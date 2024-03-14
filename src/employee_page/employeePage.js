@@ -205,7 +205,7 @@ export default function EmployeePage() {
 
         let payload=newRow;
 
-        const response = await fetch('http://localhost:8080/ttp-application/saveEmployeeDetail', {
+        const response = await fetch('http://localhost:8081/ttp-application/saveEmployeeDetail', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
@@ -234,7 +234,7 @@ export default function EmployeePage() {
         //     in_time:empData.in_time,
         //     out_time:empData.out_time
         // }
-        const response = await fetch('http://localhost:8080/ttp-application/updateEmployeeDetail', {
+        const response = await fetch('http://localhost:8081/ttp-application/updateEmployeeDetail', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
@@ -263,7 +263,7 @@ export default function EmployeePage() {
         }
 
         console.log("##newPayload##", newPayLoad_with_time_difference);
-        const response = await fetch('http://localhost:8080/ttp-application/updateEmployeeDetail', {
+        const response = await fetch('http://localhost:8081/ttp-application/updateEmployeeDetail', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
@@ -284,7 +284,7 @@ export default function EmployeePage() {
         let payload = {
             userId: propData.userId
         }
-        const response = await fetch('http://localhost:8080/ttp-application/EmployeeDetail', {
+        const response = await fetch('http://localhost:8081/ttp-application/EmployeeDetail', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'

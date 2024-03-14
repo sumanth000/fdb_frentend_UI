@@ -3,9 +3,22 @@ import { DataGrid } from '@mui/x-data-grid';
 import adminDatajson from './../data_folders/adminData.json'
 import { useEffect, useState } from 'react';
 import admstyles from './css-folder/AdminPage.module.css'
+import OfPerson from './OfAPerson';
+import EditDetailsOfPerson from './EditDetailsOfPerson';
 export default function AdminPage() {
 
     let [empData, setEmpData] = useState([]);
+    let [editRowData, setEditRowData] = useState([]);
+
+
+
+
+
+
+    let [showAdminPage, setShowAdminPage] = useState(true);
+    let [showPersonPage, setShowPersonPage] = useState(false);
+    let [showEditScreen, setShowEditScreen] = useState(false);
+
     // let [earnings]
     let columnHeaders = [
         { field: 'id', headerName: 's_no', flex: 1, align: 'center', headerAlign: 'center' },
@@ -16,7 +29,29 @@ export default function AdminPage() {
         { field: 'total_hours_worked', headerName: 'Total Hours', flex: 1, align: 'center', headerAlign: 'center' },
 
         { field: 'earnings', headerName: 'earnings', flex: 1, align: 'center', headerAlign: 'center' },
-        { field: 'ofPerson', headerName: 'personStats', flex: 1, align: 'center', headerAlign: 'center', renderCell: (params) => { } },
+        {
+            field: "action", headerName: "Action", sortable: false, width: 225, fontSize: 12, fontWeight: 'bold',
+            renderCell: (params) => {
+              return (
+                <div className={admstyles.viewButton}>
+                  <a  onClick={() => { personStatsFunction(params.row) }}> VIEW STATS</a>
+                 
+                </div>
+              )
+            }
+          },
+          {
+            field: "Edit", headerName: "EDIT PAYROLL", sortable: false, width: 225, fontSize: 12, fontWeight: 'bold',
+            renderCell: (params) => {
+              return (
+                <div className={admstyles.viewButton}>
+                  <a  onClick={() => { EditDetailsScreenFunction(params.row) }}> EDIT PAYROLL</a>
+                 
+                </div>
+              )
+            }
+          },
+
 
     ]
 
@@ -34,10 +69,32 @@ export default function AdminPage() {
 
     //     },[adminDatajson])
 
+    let backtoAdminpage=()=>{
+        setShowPersonPage(false);
+        setShowEditScreen(false);
+        setShowAdminPage(true);
+    }
+
+     let personStatsFunction=(params)=>{
+
+        console.log("##params",params);
+        setShowPersonPage(true);
+        setShowAdminPage(false);
+
+     }
+
+     let EditDetailsScreenFunction=(params)=>{
+
+        console.log("##params",params);
+
+        setEditRowData(params);
+        setShowEditScreen(true);
+        setShowAdminPage(false);
+     }
 
     let fetchAttendanceDetails = async () => {
-        //http://localhost:8080/ttp-application/getEmployeeAttendanceDetails
-        let response = await fetch('http://localhost:8080/ttp-application/getEmployeeAttendanceDetails');
+        //http://localhost:8081/ttp-application/getEmployeeAttendanceDetails
+        let response = await fetch('http://localhost:8081/ttp-application/getEmployeeAttendanceDetails');
         let responseJson = await response.json();
 
         console.log("##attendance response", responseJson);
@@ -71,7 +128,7 @@ export default function AdminPage() {
 
     let fetchPersonDetails = async () => {
 
-        let response = await fetch('http://localhost:8080/ttp-application/getEmployeeDetails');
+        let response = await fetch('http://localhost:8081/ttp-application/getEmployeeDetails');
         let responseJson = await response.json();
         console.log("##person response", responseJson);
 
@@ -87,7 +144,8 @@ export default function AdminPage() {
     return (
         <div className={admstyles.body}>
             <div className={admstyles.title}>ADMIN PAGE</div>
-            <div className={admstyles.tableContainer}>
+            { showAdminPage &&
+                <div className={admstyles.tableContainer}>
                 <DataGrid
 
                     autoHeight
@@ -98,6 +156,24 @@ export default function AdminPage() {
 
                 </DataGrid>
             </div>
+            }
+
+            {
+                showPersonPage &&
+                <div>
+                    <OfPerson  close={backtoAdminpage}/> 
+
+                </div>
+
+           }
+
+           {
+            showEditScreen &&
+            <div>
+                <EditDetailsOfPerson  data={editRowData} close={backtoAdminpage}/>
+                </div>
+           }
+            
 
         </div>
     )

@@ -131,7 +131,7 @@ let [employeePersonClass,setemployeePersonClass]=useState('personActive');
 
             if(employeeCredData.length==0)
             {
-                let employeeCredresponse =  await   fetch('http://localhost:8080/ttp-application/getEmployeeDetails');
+                let employeeCredresponse =  await   fetch('http://localhost:8081/ttp-application/getEmployeeDetails');
                 let employeeCredresponseJson= await employeeCredresponse.json();
                 employeeCredresponseJson.map((e)=>{
                     employeeCredData.push(e);
@@ -168,7 +168,7 @@ let [employeePersonClass,setemployeePersonClass]=useState('personActive');
 
             if(adminCredData.length==0)
             {
-                let adminCredresponse =  await   fetch('http://localhost:8080/ttp-application/getAdminDetails');
+                let adminCredresponse =  await   fetch('http://localhost:8081/ttp-application/getAdminDetails');
                 let adminCredresponseJson= await adminCredresponse.json();
                 adminCredresponseJson.map((e)=>{
                     adminCredData.push(e);
