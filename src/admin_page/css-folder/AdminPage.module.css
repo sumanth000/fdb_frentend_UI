@@ -161,3 +161,15 @@
     .saveButton button:active{
       transform: scale(1.2);
     }
+
+    .statsBody{
+      display: block;
+      width: 80vw;
+      height: 90vh;
+    }
+
+    .filterSpace{
+      display: block;
+        width: 150px;
+    
+    }

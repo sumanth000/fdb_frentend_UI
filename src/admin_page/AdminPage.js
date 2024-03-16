@@ -9,6 +9,10 @@ export default function AdminPage() {
 
     let [empData, setEmpData] = useState([]);
     let [editRowData, setEditRowData] = useState([]);
+    let [AttendanceData, setAttendanceData] = useState([]);
+
+    let [viewStatsData, setViewStatsData] = useState([]);
+
 
 
 
@@ -77,6 +81,8 @@ export default function AdminPage() {
 
      let personStatsFunction=(params)=>{
 
+      setEditRowData(params);
+
         console.log("##params",params);
         setShowPersonPage(true);
         setShowAdminPage(false);
@@ -98,7 +104,9 @@ export default function AdminPage() {
         let responseJson = await response.json();
 
         console.log("##attendance response", responseJson);
+       setAttendanceData(responseJson);
 
+           
         let index = 1;
         const groupedData = responseJson.reduce((groups, entry) => {
             const { user_id, employee_id, hours_worked,pay_scale } = entry;
@@ -161,7 +169,7 @@ export default function AdminPage() {
             {
                 showPersonPage &&
                 <div>
-                    <OfPerson  close={backtoAdminpage}/> 
+                    <OfPerson  attendanceData={AttendanceData} data={editRowData} close={backtoAdminpage}/> 
 
                 </div>
 

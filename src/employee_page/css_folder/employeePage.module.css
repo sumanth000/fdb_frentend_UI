@@ -48,6 +48,25 @@ position: relative;
 .plusIcon:active {
   transform: scale(0.89);
 }
+
+.viewIcon {
+  position: absolute;
+    top: 89px;
+    right: -68px;
+    width: 70px;
+    height: 70px;
+    background: rgb(237, 138, 9);
+    color: white;
+    padding: 0px;
+    border-radius: 0% 50% 50% 0%;
+    cursor: pointer;
+    transition: all 0.5ms ease-in 0.5ms;
+}
+.viewIcon:active {
+  transform: scale(0.89);
+}
+
+
 .spanText {
   position: absolute;
   left: 0px;
@@ -59,4 +78,40 @@ position: relative;
 
 .MuiDataGrid-virtualScroller.css-qvtrhg-MuiDataGrid-virtualScroller {
   overflow: auto !important;
+}
+
+.statsBody{
+  display: block;
+    width: 80vw;
+    height: 80vh;
+}
+.closeButton button{
+  position: absolute;
+  top:40px;
+  right:40px;
+  font-weight: 900;
+  display:block;
+  height: fit-content;
+  width: fit-content;
+  background: rgb(219, 126, 4);
+  color:white;
+  border:none;
+  padding:10px;
+  border-radius: 5px ;
+  transition: all 0.4ms ease-in 0.4ms;
+}
+
+.closeButton button:hover{
+  background: rgb(215, 72, 5);
+
+}
+
+.closeButton button:active{
+ transform: size(1.2);
+
+}
+.filterSpace{
+  display: block;
+    width: 150px;
+
 }

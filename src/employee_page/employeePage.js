@@ -10,9 +10,14 @@ import './css_folder/employeePage.css';
 
 import AddIcon from '@mui/icons-material/Add';
 import { Save } from '@mui/icons-material';
+import OfEmployee from './ofEmployee';
 
 
 export default function EmployeePage() {
+
+    let [viewAttendanceScreen,setViewAttendanceScreen]=useState(true);
+    let [viewPayStatsScreen,setViewPayStatsScreen]=useState(false);
+
     const location = useLocation();
     const propData = location.state?.propData;
 
@@ -139,64 +144,21 @@ export default function EmployeePage() {
             setEmpData(empNewData)
         }
        
+    
     }
 
 
-    //use effects
 
-    // useEffect(() => {
-
-    //     let empData1 = [...empData];
-
-    //     let empNew = empData1.map((e) => {
-
-    //         if (e.in_time && e.out_time) {
-    //             console.log("coming to fix time 1")
-
-    //             if (e.in_time !== null && e.out_time != null) {
-    //                 console.log("seconds calc ->" + (e.out_time - e.in_time) / 1000);
-    //                 let hoursCalc = (e.out_time - e.in_time) / 1000;
-    //                 return {
-    //                     ...e,
-    //                     hours_worked: hoursCalc
-    //                 }
-    //             }
-
-    //         }
-    //         else
-    //             return {
-    //                 ...e
-    //             }
-
-    //     })
-
-    //     console.log('new data after time calculated', empNew);
+    let viewPayStats=()=>{
 
 
-    //     setEmpDataToShow(empNew);
+     setViewAttendanceScreen(false);
+     setViewPayStatsScreen(true);
+
+    }
 
 
-
-    // }, [empData])
-
-
-
-    // useEffect(() => {
-
-    //     let empnew = empDatajson.map((e) => {
-    //         return {
-    //             ...e,
-    //             disable_clock_in: false,
-    //             disable_clock_out: true
-
-    //         }
-    //     })
-
-    //     console.log(JSON.stringify(empnew));
-
-    //     setEmpData(empnew);
-
-    // }, [empDatajson])
+    
 
   useEffect(() => {
     setEmpDataToShow(empData);
@@ -316,15 +278,25 @@ export default function EmployeePage() {
 
         }
     }, [propData])
+    let backtoEmployeepage=()=>{
+        setViewAttendanceScreen(true);
+        setViewPayStatsScreen(false);
+    }
 
     return (
         <div className='body'>
 
             <div className={empStyles.title}>EMPLOYEE PAGE</div>
 
-            <div className={empStyles.tableContainer}>
+            { viewAttendanceScreen && 
+                <div className={empStyles.tableContainer}>
                 <div className={empStyles.plusIcon} onClick={addNewEmpRow}>
                     <span className={empStyles.spanText}>ADD ROW</span>
+
+                </div>
+
+                <div className={empStyles.viewIcon} onClick={viewPayStats}>
+                    <span className={empStyles.spanText}>VIEW PAY</span>
 
                 </div>
 
@@ -340,6 +312,16 @@ export default function EmployeePage() {
 
                 </DataGrid>
             </div>
+
+            }
+
+            {
+               viewPayStatsScreen &&
+               
+               <OfEmployee close={backtoEmployeepage} propData={propData} ></OfEmployee>
+            }
+
+            
 
 
         </div>
