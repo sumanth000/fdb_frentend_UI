@@ -1,6 +1,7 @@
 
 import { useEffect, useState } from 'react';
 import admstyles from './css-folder/AdminPage.module.css'
+import { Alert } from '@mui/material';
 
 
 
@@ -12,7 +13,8 @@ const EditDetailsOfPerson = (params) => {
         employeeId: '',
         userId: '',
         payscale: '',
-        newpayscale: ''
+        newpayscale: '',
+        currentRoleName:''
     })
 
 
@@ -25,6 +27,7 @@ const EditDetailsOfPerson = (params) => {
             let newObj = { ...prev };
             newObj.employeeId = data.employee_id;
             newObj.userId = data.user_id;
+            newObj.currentRoleName=data.current_role_name;
             return newObj;
         })
 
@@ -71,6 +74,9 @@ const EditDetailsOfPerson = (params) => {
             body: JSON.stringify(payload)
         });
 
+        console.log(response);
+
+       
         close();
 
      }
@@ -95,6 +101,12 @@ const EditDetailsOfPerson = (params) => {
                     <label>CURRENT PAYROLL:</label>
                     <span>
                         {empObj.payscale}
+                    </span>
+                </div>
+                <div className={admstyles.boxy}>
+                    <label>CURRENT ROLE NAME:</label>
+                    <span>
+                        {empObj.currentRoleName}
                     </span>
                 </div>
 
