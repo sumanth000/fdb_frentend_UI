@@ -8,6 +8,8 @@ import { Alert } from '@mui/material';
 
 const EditDetailsOfPerson = (params) => {
 
+    let [showalert, setShowAlert] = useState(false);
+
     let { close, data } = params;
     let [empObj, setEmpObj] = useState({
         employeeId: '',
@@ -18,9 +20,27 @@ const EditDetailsOfPerson = (params) => {
     })
 
 
+    let [maxPayscale, setMaxPayscale] = useState(0);
+
+      let fetchStadardPayrolls = async (current_role_name) => {
+
+        let standardPayRollResponse = await fetch('http://localhost:8081/ttp-application/standardPayRolls');
+        let standardPayRollResponseJson = await standardPayRollResponse.json();
+        console.log('standardPayRollResponseJson', standardPayRollResponseJson);
+
+        let maxPayscale = standardPayRollResponseJson.filter((e) => { return e.role_name == current_role_name })[0].standard_pay_scale;
+
+        setMaxPayscale(maxPayscale);
+          
+
+      }
 
     useEffect(() => {
         console.log('data', data);
+
+
+        fetchStadardPayrolls(data.current_role_name);
+
 
 
         setEmpObj((prev) => {
@@ -61,23 +81,46 @@ const EditDetailsOfPerson = (params) => {
     }
 
 
+
+
      let saveEmployeeDetails =async()=>{
         let payload = {
             newpayscale: empObj.newpayscale,
             employeeId: empObj.employeeId
         }
-        const response = await fetch('http://localhost:8081/ttp-application/updatePersonPayRoll', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify(payload)
-        });
 
-        console.log(response);
+        if(empObj.newpayscale>maxPayscale)
+            {
+                console.log('Payroll cannot be greater than maximum payroll');
+                setTimeout(() => {
+
+                    setShowAlert(false);
+                    
+                }, 1000);
+
+                setShowAlert(true);
+
+                // return;
+
+            }
+            else
+            {
+                const response = await fetch('http://localhost:8081/ttp-application/updatePersonPayRoll', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(payload)
+                });
+        
+                console.log(response);
+                close();
+            }
 
        
-        close();
+
+       
+        // close();
 
      }
 
@@ -86,6 +129,13 @@ const EditDetailsOfPerson = (params) => {
             <div className={admstyles.closeButton}>
                 <button onClick={close}>Back</button>
             </div>
+            <div style={admstyles.alertBox}>
+            {
+                showalert && <Alert severity="error">Payroll cannot be greater than maximum payroll</Alert>
+            }
+            </div>
+
+            
 
 
             <div className={admstyles.box_container}>
@@ -109,6 +159,12 @@ const EditDetailsOfPerson = (params) => {
                         {empObj.currentRoleName}
                     </span>
                 </div>
+                <div className={admstyles.boxy}>
+                    <label>MAXIMUM PAY ROLL:</label>
+                    <span>
+                        {maxPayscale}
+                    </span>
+                </div>
 
                 <div className={admstyles.boxy}>
                     <label>EDIT PAYROLL:</label>
@@ -123,6 +179,8 @@ const EditDetailsOfPerson = (params) => {
             <div className={admstyles.saveButton}>
                 <button onClick={saveEmployeeDetails}>save</button>
             </div>
+
+            
 
         </div>
     )

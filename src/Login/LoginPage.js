@@ -223,7 +223,7 @@ export default function LoginPage() {
 
 
     //         if (adminCredData.length == 0) {
-    //             let adminCredresponse = await fetch('http://localhost:8081/ttp-application/getAdminDetails');
+    //             let adminCredresponse = await fetch('http://localhost:8081/ttp-application/getStandardPayrolls');
     //             let adminCredresponseJson = await adminCredresponse.json();
     //             adminCredresponseJson.map((e) => {
     //                 adminCredData.push(e);
