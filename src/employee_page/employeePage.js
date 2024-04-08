@@ -11,12 +11,15 @@ import './css_folder/employeePage.css';
 import AddIcon from '@mui/icons-material/Add';
 import { Save } from '@mui/icons-material';
 import OfEmployee from './ofEmployee';
+import LeavesPage from './leavesPage';
 
 
 export default function EmployeePage() {
 
     let [viewAttendanceScreen,setViewAttendanceScreen]=useState(true);
     let [viewPayStatsScreen,setViewPayStatsScreen]=useState(false);
+    let [viewLeavesScreen,setViewLeavesScreen]=useState(false);
+
 
     const location = useLocation();
     const propData = location.state?.propData;
@@ -155,8 +158,20 @@ export default function EmployeePage() {
 
      setViewAttendanceScreen(false);
      setViewPayStatsScreen(true);
+     setViewLeavesScreen(false);
+
 
     }
+
+    let viewLeaveStats=()=>{
+
+
+        setViewLeavesScreen(true);
+        setViewAttendanceScreen(false);
+        setViewPayStatsScreen(false);
+
+   
+       }
 
 
     
@@ -281,9 +296,11 @@ export default function EmployeePage() {
 
         }
     }, [propData])
+
     let backtoEmployeepage=()=>{
         setViewAttendanceScreen(true);
         setViewPayStatsScreen(false);
+        setViewLeavesScreen(false);
     }
 
     return (
@@ -300,6 +317,11 @@ export default function EmployeePage() {
 
                 <div className={empStyles.viewIcon} onClick={viewPayStats}>
                     <span className={empStyles.spanText}>VIEW PAY</span>
+
+                </div>
+
+                <div className={empStyles.leaveIcon} onClick={viewLeaveStats}>
+                    <span className={empStyles.spanText}>ADD LEAVES</span>
 
                 </div>
 
@@ -322,6 +344,13 @@ export default function EmployeePage() {
                viewPayStatsScreen &&
                
                <OfEmployee close={backtoEmployeepage} propData={propData} ></OfEmployee>
+            }
+
+
+{
+               viewLeavesScreen &&
+               
+               <LeavesPage close={backtoEmployeepage} propData={propData} ></LeavesPage>
             }
 
             
