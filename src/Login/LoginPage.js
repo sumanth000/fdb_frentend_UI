@@ -309,7 +309,7 @@ export default function LoginPage() {
 
                 <div className="information">
                     <div className={focusAndValueExistClassPassword}>PASSWORD</div>
-                    <input onFocus={() => handleFocus('password')} onBlur={handleBlur} onChange={(e) => handleChange(e.target.value, 'password')} className="inputSpace"></input>
+                    <input type='password' onFocus={() => handleFocus('password')} onBlur={handleBlur} onChange={(e) => handleChange(e.target.value, 'password')} className="inputSpace"></input>
                 </div>
 
                 {/* <div className="buttonSpace">
