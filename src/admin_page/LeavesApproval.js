@@ -84,6 +84,7 @@ const LeavesApproval = (params) => {
                 setShowAlertApprove(false);
             }, 3000);
         }
+        
 
         fetchLeavesHistory(data.employee_id);
     }
@@ -105,7 +106,7 @@ const LeavesApproval = (params) => {
     }
 
     let fetchLeavesHistory = async (empId) => {
-        let response = await fetch('http://localhost:8081/ttp-application/leaves/history?employeeId=' + empId);
+        let response = await fetch('http://localhost:8081/ttp-application/leaves/history?employeeId=' + data.employee_id);
         let responseJson = await response.json();
         console.log('responseJson history --> ', responseJson);
         if (responseJson) {
@@ -116,7 +117,8 @@ const LeavesApproval = (params) => {
     }
 
     useEffect(() => {
-        console.log('data', data);
+        console.log('data------> ', data);
+        setEmpDataToShow([]);
 
 
 
