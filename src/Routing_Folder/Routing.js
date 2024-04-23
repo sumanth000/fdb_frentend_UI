@@ -8,8 +8,9 @@ import {
 } from "react-router-dom";
 import LoginPage from "../Login/LoginPage";
 import AdminPage from "../admin_page/AdminPage";
-import EmployeePage from "../employee_page/employeePage";
 import { Navigate } from "react-router-dom";
+import StudentPage from "../employee_page/studentPage";
+import InstructorPage from "../instructor_page/instructorPage";
 export default function Routing(){
     return (
         <div>
@@ -24,13 +25,13 @@ export default function Routing(){
                         ></Route>
                         <Route
                             exact
-                            path="/admin"
-                            element={<AdminPage />}
+                            path="/Instructor"
+                            element={<InstructorPage />}
                         ></Route>
                         <Route
                             exact
-                            path="/employee"
-                            element={<EmployeePage />}
+                            path="/Student"
+                            element={<StudentPage />}
                         ></Route>
                     </Routes>
                 </div>

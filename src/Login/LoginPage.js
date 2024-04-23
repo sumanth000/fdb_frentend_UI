@@ -6,7 +6,7 @@ import empCredData from '../data_folders/employeeCredentials.json'
 import axios from 'axios';
 export default function LoginPage() {
     let credentialsObject = {
-        who: 'employee',
+        who: 'student',
         password: '',
         userId: '',
         employeeId: ''
@@ -16,12 +16,12 @@ export default function LoginPage() {
 
     let [logInSuccess, setLogInSuccess] = useState(false);
 
-    let [logInSuccessAsAdmin, setLogInSuccessAsAdmin] = useState(false);
-    let [logInSuccessAsEmployee, setLogInSuccessAsEmployee] = useState(false);
+    let [logInSuccessAsInstructor, setLogInSuccessAsInstructor] = useState(false);
+    let [logInSuccessAsStudent, setLogInSuccessAsStudent] = useState(false);
 
 
-    let [selectAsEmployee, setSelectAsEmployee] = useState(true);
-    let [selectAsAdmin, setSelectAsAdmin] = useState(false);
+    let [selectAsStudent, setSelectAsStudent] = useState(true);
+    let [selectAsInstructor, setSelectAsInstructor] = useState(false);
 
 
     let [userId, setUserId] = useState('');
@@ -29,11 +29,11 @@ export default function LoginPage() {
     let [logInAsData, setLogInAsData] = useState('');
     let [credentials, setCredentials] = useState(credentialsObject);
 
-
     //effect for the person type
+    
 
-    let [adminPersonClass, setAdminPersonClass] = useState('person');
-    let [employeePersonClass, setemployeePersonClass] = useState('personActive');
+    let [instructorPersonClass, setInstructorPersonClass] = useState('person');
+    let [studentPersonClass, setstudentPersonClass] = useState('personActive');
 
 
     //effect for the username and password on the input
@@ -79,27 +79,32 @@ export default function LoginPage() {
     }
     let selectAs = (event) => {
         let id = event.target.id;
-        if (id === "admin") {
-            setSelectAsAdmin(true);
-            setSelectAsEmployee(false);
-            setCredentials({ ...credentials, who: 'admin' })
-            setAdminPersonClass('personActive');
-            setemployeePersonClass('person');
+        if (id === "instructor") {
+           
+            setSelectAsStudent(false);
+            setSelectAsInstructor(true);
+            setCredentials({ ...credentials, who: 'instructor' })
+            
+           
+
+            setstudentPersonClass('personActive');
+            setInstructorPersonClass('person')
 
             // document.documentElement.style.setProperty('--box-background','linear-gradient(45deg,#637da5,rgb(152, 172, 186))')
-            document.documentElement.style.setProperty('--box-background', getComputedStyle(document.documentElement).getPropertyValue('--admin-box-background'))
+            document.documentElement.style.setProperty('--box-background', getComputedStyle(document.documentElement).getPropertyValue('--instructor-box-background'))
 
         }
 
-        if (id === "employee") {
-            setSelectAsEmployee(true);
-            setSelectAsAdmin(false);
-            setCredentials({ ...credentials, who: 'employee' })
+        if (id === "student") {
+            setSelectAsStudent(true);
+            setSelectAsInstructor(false);
+            setCredentials({ ...credentials, who: 'student' })
 
-            setAdminPersonClass('person');
-            setemployeePersonClass('personActive');
+            setstudentPersonClass('personActive');
+            setInstructorPersonClass('person')
+         
 
-            document.documentElement.style.setProperty('--box-background', getComputedStyle(document.documentElement).getPropertyValue('--employee-box-background'))
+            document.documentElement.style.setProperty('--box-background', getComputedStyle(document.documentElement).getPropertyValue('--student-box-background'))
 
 
         }
@@ -108,16 +113,16 @@ export default function LoginPage() {
 
     }
 
-    let checkCredentialsOfEmployee = () => {
+    // let checkCredentialsOfEmployee = () => {
 
-        console.log("userid   ", userId, " password ", password)
+    //     console.log("userid   ", userId, " password ", password)
 
-        if (empCredData.find((e) => { return e.password == password && e.userId == userId })) {
-            setLogInSuccessAsEmployee(true);
-        }
+    //     if (empCredData.find((e) => { return e.password == password && e.userId == userId })) {
+    //         setLogInSuccessAsEmployee(true);
+    //     }
 
 
-    }
+    // }
 
 
     // let logInAndFetchCookie=async()=>{
@@ -148,7 +153,7 @@ export default function LoginPage() {
         console.log(credentials.who, '#', credentials.userId, '#', credentials.password);
     
         try {
-            const response = await fetch('http://localhost:8081/ttp-application/login', {
+            const response = await fetch('http://localhost:8081/fdb-application/login', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
@@ -159,17 +164,21 @@ export default function LoginPage() {
     
             // Assuming responseJson contains the login status
             const responseJson = await response.json();
+
+            console.log('response', responseJson);
             console.log('Received cookies:', document.cookie);
     
             // Set login success based on user type
-            if (credentials.who === 'employee' && responseJson.status === 'SUCCESS') {
-                console.log('employeeId:', responseJson.employeeId + ', payScale:', responseJson.payscale);
-
-                setCredentials({ ...credentials, employeeId: responseJson.employeeId, payScale: responseJson.payscale, currentRole:responseJson.currentRole });
-                setLogInSuccessAsEmployee(true);
-            } else if (credentials.who === 'admin' && responseJson.status === 'SUCCESS') {
-                // setDetails();
-                setLogInSuccessAsAdmin(true);
+            if(responseJson.status === 'FAILURE'){
+                console.log('Login failed');
+                alert('Login failed');
+            }
+            else if (credentials.who === 'student' && responseJson.status === 'SUCCESS') {
+                setCredentials({ ...credentials, id: responseJson.id});
+                setLogInSuccessAsStudent(true);
+            } else if (credentials.who === 'instructor' && responseJson.status === 'SUCCESS') {
+                setCredentials({ ...credentials, id: responseJson.id});
+                setLogInSuccessAsInstructor(true);
             }
     
             console.log('Login successful');
@@ -180,77 +189,7 @@ export default function LoginPage() {
     };
 
 
-    // let setDetails = async () => {
-
-    //     if (credentials.who == "employee") {
-    //         let employeeCredData = [];
-
-
-    //         if (employeeCredData.length == 0) {
-    //             let employeeCredresponse = await fetch('http://localhost:8081/ttp-application/getEmployeeDetails');
-    //             let employeeCredresponseJson = await employeeCredresponse.json();
-    //             employeeCredresponseJson.map((e) => {
-    //                 employeeCredData.push(e);
-    //             })
-    //         }
-
-
-
-    //         console.log("### employeeCredData of admin", employeeCredData);
-    //         console.log(credentials.who, '#', credentials.userId, '#', credentials.password);
-
-
-    //         if (employeeCredData.length > 0)
-    //             if (employeeCredData.find((e, index) => { return e.userid == credentials.userId && e.password == credentials.password })) {
-
-
-    //                 setCredentials({ ...credentials, 
-    //                     employeeId: employeeCredData.find((e, index) => { return e.userid == credentials.userId && e.password == credentials.password }).id,
-    //                      payScale: employeeCredData.find((e, index) => { return e.userid == credentials.userId && e.password == credentials.password }).payscale });
-
-    //                 // console.log('Employee login success')
-    //                 // setLogInSuccessAsEmployee(true);
-    //             }
-
-
-
-
-
-    //     }
-    //     if (credentials.who == "admin") {
-
-    //         let adminCredData = [];
-
-
-    //         if (adminCredData.length == 0) {
-    //             let adminCredresponse = await fetch('http://localhost:8081/ttp-application/getStandardPayrolls');
-    //             let adminCredresponseJson = await adminCredresponse.json();
-    //             adminCredresponseJson.map((e) => {
-    //                 adminCredData.push(e);
-    //             })
-    //         }
-
-
-
-    //         console.log("### adminCredData of admin", adminCredData);
-    //         console.log(credentials.who, '#', credentials.userId, '#', credentials.password);
-
-
-    //         if (adminCredData.length > 0)
-    //             if (adminCredData.find((e, index) => { console.log(index); return e.userid == credentials.userId && e.password == credentials.password })) {
-    //                 // console.log('admin login success')
-    //                 // setLogInSuccessAsAdmin(true);
-    //             }
-
-
-
-
-    //         //rechecking the dummy details
-    //         // checkCredentialsOfAdmin();
-    //     }
-    // }
-
-
+    
 
     //useEffects
     const rootStyles = getComputedStyle(document.documentElement);
@@ -268,12 +207,12 @@ export default function LoginPage() {
     }, [])
 
 
-    if (logInSuccessAsAdmin) {
-        return <Navigate to="/admin" />;
+    if (logInSuccessAsInstructor) {
+        return <Navigate to="/Instructor" state={{ propData: credentials }} />;
     }
 
-    if (logInSuccessAsEmployee) {
-        return <Navigate to="/employee" state={{ propData: credentials }} />;
+    if (logInSuccessAsStudent) {
+        return <Navigate to="/Student" state={{ propData: credentials }} />;
     }
     return (
 
@@ -287,15 +226,15 @@ export default function LoginPage() {
 
                 <div className="who">
 
-                    <div onClick={selectAs} className={employeePersonClass} id="employee">
-                        <input type='radio' checked={selectAsEmployee} readOnly id="employee"></input>
-                        EMPLOYEE
+                    <div onClick={selectAs} className={studentPersonClass} id="student">
+                        <input type='radio' checked={selectAsStudent} readOnly id="student"></input>
+                        STUDENT
                     </div>
 
 
-                    <div onClick={selectAs} className={adminPersonClass} id="admin">
-                        <input type='radio' checked={selectAsAdmin} readOnly id="admin"></input>
-                        ADMIN
+                    <div onClick={selectAs} className={instructorPersonClass} id="instructor">
+                        <input type='radio' checked={selectAsInstructor} readOnly id="instructor"></input>
+                        INSTRUCTOR
                     </div>
                 </div>
 

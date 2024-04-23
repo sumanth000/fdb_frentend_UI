@@ -6,6 +6,9 @@ import admstyles from './css-folder/AdminPage.module.css'
 import OfPerson from './OfAPerson';
 import EditDetailsOfPerson from './EditDetailsOfPerson';
 import LeavesApproval from './LeavesApproval';
+import { useLocation } from 'react-router-dom';
+
+
 export default function AdminPage() {
 
     let [empData, setEmpData] = useState([]);
@@ -16,7 +19,8 @@ export default function AdminPage() {
 
 
 
-
+    const location = useLocation();
+    const propData = location.state?.propData;
 
 
 
@@ -177,7 +181,7 @@ export default function AdminPage() {
 
     return (
         <div className={admstyles.body}>
-            <div className={admstyles.title}>ADMIN PAGE</div>
+            <div className={admstyles.title}>INSTRUCTOR PAGE</div>
             { showAdminPage &&
                 <div className={admstyles.tableContainer}>
                 <DataGrid
