@@ -248,11 +248,15 @@ export default function StudentPage() {
             setStudentJson(dataJson);
 
             let coursesData = dataJson['courses'];
-            let dbData = coursesData.map((e, index) => { return { ...e, actId: index + 1, grade: e['grade'] != null ? e['grade'] : 'Yet to be graded' } });
+            if(dataJson['courses'] && coursesData.length>0)
+            {
+                let dbData = coursesData.map((e, index) => { return { ...e, actId: index + 1, grade: e['grade'] != null ? e['grade'] : 'Yet to be graded' } });
 
-            setEmployeeDbData(dbData);
-
-            setEmpData(dbData);
+                setEmployeeDbData(dbData);
+    
+                setEmpData(dbData);
+            }
+            
         }
 
 
